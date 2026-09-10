@@ -12,11 +12,12 @@ spec:
   template:
     metadata:
       labels:
-        app: webapp
+        app: argo_webapp
     spec:
       containers:
         - name: webapp
-          image: localhost:5000/webapp:v1
+          image: argo_webapp:latest
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5000
           readinessProbe:
