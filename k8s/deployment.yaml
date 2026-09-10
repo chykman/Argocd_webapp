@@ -12,7 +12,7 @@ spec:
   template:
     metadata:
       labels:
-        app: argo_webapp
+        app: webapp
     spec:
       containers:
         - name: webapp
