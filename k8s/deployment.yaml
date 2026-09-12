@@ -29,3 +29,16 @@ spec:
             requests:
               cpu: "50m"
               memory: "64Mi"
+          env:
+            - name: APP_VERSION
+              value: "v3"
+            - name: REDIS_HOST
+              value: "redis"
+            - name: REDIS_PORT
+              value: "6379"
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: redis-secret
+                  key: password
+            
