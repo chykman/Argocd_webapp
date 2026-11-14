@@ -4,6 +4,8 @@ metadata:
   name: webapp
   labels:
     app: webapp
+    app.kubernetes.io/name: webapp
+    app.kubernetes.io/part-of: gitops-observatory
 spec:
   replicas: 2
   selector:
@@ -13,32 +15,46 @@ spec:
     metadata:
       labels:
         app: webapp
+        app.kubernetes.io/name: webapp
+        app.kubernetes.io/part-of: gitops-observatory
     spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 101
+        runAsGroup: 101
+        seccompProfile:
+          type: RuntimeDefault
       containers:
-        - name: webapp
-          image: argo_webapp:latest
+        - name: frontend
+          image: argo_webapp-ui:latest
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 5000
+            - name: http
+              containerPort: 8080
           readinessProbe:
             httpGet:
               path: /healthz
-              port: 5000
-            initialDelaySeconds: 2
+              port: http
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
           resources:
             requests:
-              cpu: "50m"
-              memory: "64Mi"
-          env:
-            - name: APP_VERSION
-              value: "v3"
-            - name: REDIS_HOST
-              value: "redis"
-            - name: REDIS_PORT
-              value: "6379"
-            - name: REDIS_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: redis-secret
-                  key: password
-            
+              cpu: 25m
+              memory: 32Mi
+          volumeMounts:
+            - name: nginx-tmp
+              mountPath: /tmp
+      volumes:
+        - name: nginx-tmp
+          emptyDir: {}

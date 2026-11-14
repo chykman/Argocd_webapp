@@ -1,0 +1,3 @@
+# API responses are deliberately marked no-store to prevent caching live operational data.
+10049	IGNORE	API responses must not be stored by caches.
+10109	IGNORE	Modern Web Application

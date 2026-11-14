@@ -1,0 +1,3 @@
+# ZAP passive-scan exception for an informational framework fingerprint.
+# This finding identifies a client-rendered app and is not an exploitable issue.
+10109	IGNORE	Modern Web Application
