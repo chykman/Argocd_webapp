@@ -1,4 +1,4 @@
-fastapi==0.162.7
+fastapi==0.165.0
 kubernetes==37.0.2
 prometheus-client==0.26.0
 redis==8.1.0
